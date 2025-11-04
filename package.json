@@ -1,0 +1,16 @@
+{
+  "name": "unreal_webcam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webCam.js",
+  "scripts": {
+    "start": "browser-sync start --server --files '*.css, *.html, *.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
+  }
+}

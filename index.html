@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCam</title>
+    <link rel="stylesheet" href="webCam.css">
+</head>
+<body>
+    <div class="photobooth">
+        <div class="controls">
+            <button onclick="takePhoto()">Take Photo</button>
+
+            <div class="filters">
+                <label for="filter">Choose Filter:</label>
+                <select id="filter">
+                    <option value="none">None</option>
+                    <option value="redEffect">Red Effect</option>
+                    <option value="rgbSplit">RGB Split</option>
+                    <option value="greenScreen">Green Screen</option>
+                    <option value="ghost">Ghost Effect</option>
+                </select>
+            </div>
+
+
+            <div class="rgb">
+                <label for="rmin">Red Min:</label>
+                <input type="range" name="rmin" min = "0" max="255">
+                <label for="rmax">Red Max:</label>
+                <input type="range" name="rmax" min = "0" max="255">
+
+                <br>
+
+                <label for="gmin">Green Min:</label>
+                <input type="range" name="gmin" min = "0" max="255">
+                <label for="gmax">Green Max:</label>
+                <input type="range" name="gmax" min = "0" max="255">
+
+                <br>
+
+                <label for="bmin">Blue Min:</label>
+                <input type="range" name="bmin" min = "0" max="255">
+                <label for="bmax">Blue Max:</label>
+                <input type="range" name="bmax" min = "0" max="255">
+            </div>
+        </div>
+        <canvas class="photo"></canvas>
+        <video class="player"></video>
+        <div class="strip"></div>
+    </div>
+
+    <audio class="snap" src=""></audio>
+
+    <script src="webCam.js"></script>
+</body>
+</html>

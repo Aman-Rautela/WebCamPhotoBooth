@@ -1,0 +1,455 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+}
+
+.photobooth {
+    background: rgba(20, 20, 35, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    width: 95vw;
+    height: 95vh;
+    max-width: 1600px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 1fr;
+    gap: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.photobooth::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* When photos exist, create space for strip */
+.photobooth.has-photos {
+    grid-template-columns: 280px 1fr 250px;
+}
+
+.controls {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1;
+    overflow-y: auto;
+}
+
+.controls::-webkit-scrollbar {
+    width: 6px;
+}
+
+.controls::-webkit-scrollbar-track {
+    background: rgba(20, 20, 35, 0.5);
+    border-radius: 10px;
+}
+
+.controls::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8a2be2 0%, #9b59b6 100%);
+    border-radius: 10px;
+}
+
+.controls button {
+    background: linear-gradient(135deg, #8a2be2 0%, #9b59b6 100%);
+    color: white;
+    border: none;
+    padding: 16px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.controls button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.controls button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.controls button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(138, 43, 226, 0.6);
+}
+
+.controls button:active {
+    transform: translateY(-1px);
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filters label {
+    font-weight: 600;
+    color: #e0e0e0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filters select {
+    padding: 10px 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 14px;
+    background: rgba(30, 30, 50, 0.8);
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.filters select:hover {
+    border-color: #8a2be2;
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: #8a2be2;
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+}
+
+.filters select option {
+    background: #1a1a2e;
+    color: #e0e0e0;
+}
+
+.rgb {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(30, 30, 50, 0.6);
+    padding: 18px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease;
+}
+
+.rgb.show {
+    display: flex;
+    opacity: 1;
+    max-height: 500px;
+    padding: 18px;
+}
+
+.rgb label {
+    font-weight: 600;
+    color: #b0b0b0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.rgb input[type="range"] {
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #1a1a2e, #8a2be2);
+    outline: none;
+    -webkit-appearance: none;
+    margin-bottom: 8px;
+}
+
+.rgb input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8a2be2 0%, #9b59b6 100%);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(138, 43, 226, 0.6);
+    transition: all 0.3s ease;
+}
+
+.rgb input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.8);
+}
+
+.rgb input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8a2be2 0%, #9b59b6 100%);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(138, 43, 226, 0.6);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.rgb input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.8);
+}
+
+.rgb br {
+    display: none;
+}
+
+.player {
+    display: none;
+}
+
+.photo {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    max-height: 80vh;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    background: #000;
+    z-index: 1;
+    border: 2px solid rgba(138, 43, 226, 0.3);
+}
+
+.strip {
+    grid-column: 3;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 200px;
+    gap: 15px;
+    padding: 0;
+    background: rgba(30, 30, 50, 0.6);
+    border-radius: 20px;
+    overflow-y: auto;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    width: 0;
+    opacity: 0;
+    padding: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ⭐ NEW: Show strip on the right when photos exist */
+.photobooth.has-photos .strip {
+    width: 250px;
+    opacity: 1;
+    padding: 20px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.strip::-webkit-scrollbar {
+    width: 8px;
+}
+
+.strip::-webkit-scrollbar-track {
+    background: rgba(20, 20, 35, 0.5);
+    border-radius: 10px;
+}
+
+.strip::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8a2be2 0%, #9b59b6 100%);
+    border-radius: 10px;
+}
+
+.strip::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #9b59b6 0%, #8a2be2 100%);
+}
+
+.strip a {
+    text-decoration: none;
+    display: block;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid rgba(138, 43, 226, 0.2);
+    height: 200px;
+    width: 100%;
+}
+
+.strip a::after {
+    content: '⬇';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(138, 43, 226, 0.9);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    color: white;
+}
+
+.strip a:hover::after {
+    opacity: 1;
+}
+
+.strip a:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(138, 43, 226, 0.4);
+    border-color: #8a2be2;
+}
+
+.strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .photobooth {
+        grid-template-columns: 250px 1fr;
+    }
+
+    .photobooth.has-photos {
+        grid-template-columns: 250px 1fr 220px;
+    }
+
+    .controls {
+        padding: 20px;
+        gap: 18px;
+    }
+
+    .strip a {
+        height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .photobooth {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .photobooth.has-photos {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr 180px;
+    }
+
+    .controls {
+        grid-column: 1;
+        grid-row: 1;
+        padding: 15px;
+        gap: 15px;
+        max-height: 200px;
+    }
+
+    .controls button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+
+    .photo {
+        grid-column: 1;
+        grid-row: 2;
+        max-height: 60vh;
+    }
+
+    .strip {
+        grid-column: 1;
+        grid-row: 3;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-auto-rows: 100px;
+        gap: 10px;
+        padding: 10px;
+        width: 100%;
+        max-height: 180px;
+    }
+
+    .photobooth.has-photos .strip {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .strip a {
+        height: 100px;
+    }
+}
+
+/* Add pulsing animation to take photo button */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.controls button:hover {
+    animation: pulse 2s ease-in-out infinite;
+}
